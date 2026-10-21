@@ -1,0 +1,296 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#6d5dfc">
+<title>SubsTrack — Control de suscripciones</title>
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="assets/icon.svg" type="image/svg+xml">
+<style>
+:root{
+  --bg:#f6f7fb;--panel:#ffffff;--text:#171829;--muted:#74788c;--line:#e7e9f3;
+  --p:#6d5dfc;--p2:#9c6bff;--cyan:#17c3e2;--green:#15c783;--orange:#ff9f43;
+  --red:#ff5d75;--pink:#ff69b4;--blue:#3b82f6;--yellow:#f5c542;
+  --shadow:0 12px 34px rgba(31,35,70,.10);--radius:22px;
+}
+[data-theme="dark"]{
+  --bg:#0f1120;--panel:#171a2b;--text:#f5f6ff;--muted:#a8adc3;--line:#292d45;
+  --shadow:0 12px 34px rgba(0,0,0,.28);
+}
+*{box-sizing:border-box} body{margin:0;background:var(--bg);color:var(--text);font:15px/1.45 Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Arial}
+button,input,select,textarea{font:inherit}.app{max-width:1180px;margin:auto;padding:18px 16px 92px}
+header{display:flex;gap:14px;align-items:center;justify-content:space-between;margin-bottom:18px}
+.brand{display:flex;gap:11px;align-items:center}.logo{width:46px;height:46px;border-radius:15px;display:grid;place-items:center;color:white;background:linear-gradient(135deg,var(--p),var(--cyan));font-size:24px;box-shadow:var(--shadow)}
+.brand h1{font-size:22px;margin:0}.brand small{color:var(--muted)}
+.actions{display:flex;gap:8px;flex-wrap:wrap}.iconbtn,.btn{border:0;border-radius:14px;cursor:pointer;min-height:44px;padding:0 14px;background:var(--panel);color:var(--text);box-shadow:0 1px 0 var(--line)}
+.btn.primary{background:linear-gradient(135deg,var(--p),var(--p2));color:#fff;font-weight:750;box-shadow:0 8px 24px rgba(109,93,252,.25)}
+.btn.good{background:linear-gradient(135deg,#10b981,#22c55e);color:#fff;font-weight:700}.btn.danger{background:#fff0f2;color:#d92f4d}.btn.ghost{background:transparent;border:1px solid var(--line)}
+.grid{display:grid;grid-template-columns:repeat(12,1fr);gap:14px}.card{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:18px;box-shadow:var(--shadow);min-width:0}
+.hero{grid-column:span 7;background:linear-gradient(135deg,#6d5dfc,#8b5cf6 50%,#18bce1);color:#fff;position:relative;overflow:hidden}.hero:after{content:"";position:absolute;width:240px;height:240px;border-radius:50%;background:rgba(255,255,255,.10);right:-70px;top:-90px}
+.hero .big{font-size:38px;font-weight:850;letter-spacing:-1.2px}.hero .meta{opacity:.88}.quick{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:18px}.quick div{background:rgba(255,255,255,.14);padding:12px;border-radius:16px}.quick b{display:block;font-size:19px}
+.next{grid-column:span 5}.section-title{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px}.section-title h2{margin:0;font-size:17px}.muted{color:var(--muted)}
+.kpis{grid-column:span 12;display:grid;grid-template-columns:repeat(4,1fr);gap:12px}.kpi{padding:16px;border-radius:18px;border:1px solid var(--line);background:var(--panel)}.kpi span{color:var(--muted);font-size:12px}.kpi strong{font-size:23px;display:block;margin-top:4px}.kpi i{font-style:normal;font-size:12px}
+.mainlist{grid-column:span 8}.side{grid-column:span 4}.tabs{display:flex;gap:8px;overflow:auto;padding-bottom:4px}.tab{border:1px solid var(--line);background:var(--panel);color:var(--muted);padding:9px 13px;border-radius:999px;white-space:nowrap;cursor:pointer}.tab.active{background:var(--p);color:#fff;border-color:var(--p)}
+.toolbar{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}.search{flex:1;min-width:190px}.field, input,select,textarea{width:100%;border:1px solid var(--line);background:var(--bg);color:var(--text);border-radius:13px;padding:11px 12px;outline:none}.field:focus,input:focus,select:focus,textarea:focus{border-color:var(--p);box-shadow:0 0 0 3px rgba(109,93,252,.12)}
+.sub{display:grid;grid-template-columns:auto 1fr auto;gap:12px;align-items:center;padding:13px 4px;border-bottom:1px solid var(--line)}.sub:last-child{border-bottom:0}.badgeicon{width:46px;height:46px;border-radius:15px;display:grid;place-items:center;color:#fff;font-size:21px}.sub h3{font-size:15px;margin:0 0 2px}.sub small{color:var(--muted)}.money{text-align:right}.money b{display:block}.pill{display:inline-flex;align-items:center;gap:5px;padding:4px 8px;border-radius:999px;font-size:11px;background:var(--bg);color:var(--muted);margin-top:5px}
+.progress{height:9px;background:var(--bg);border-radius:999px;overflow:hidden;margin:8px 0}.progress>i{display:block;height:100%;background:linear-gradient(90deg,var(--green),var(--yellow),var(--red));border-radius:999px}
+.donutWrap{display:flex;gap:18px;align-items:center}.donut{width:135px;aspect-ratio:1;border-radius:50%;background:conic-gradient(var(--p) 0 36%,var(--cyan) 36% 58%,var(--green) 58% 74%,var(--orange) 74% 88%,var(--pink) 88% 100%);position:relative;flex:none}.donut:after{content:"";position:absolute;inset:24px;border-radius:50%;background:var(--panel)}.legend{font-size:12px;display:grid;gap:7px}.dot{width:9px;height:9px;border-radius:50%;display:inline-block;margin-right:6px}
+.insight{border-radius:17px;padding:14px;margin-top:10px;background:linear-gradient(135deg,rgba(109,93,252,.10),rgba(23,195,226,.08));border:1px solid var(--line)}
+.calendar{display:grid;gap:9px}.event{display:grid;grid-template-columns:54px 1fr auto;gap:10px;align-items:center;padding:10px;border-radius:15px;background:var(--bg)}.day{font-weight:800;text-align:center}.day span{display:block;font-size:11px;color:var(--muted)}
+.bottomnav{position:fixed;z-index:20;left:50%;transform:translateX(-50%);bottom:10px;width:min(680px,calc(100% - 20px));background:color-mix(in srgb,var(--panel) 92%,transparent);backdrop-filter:blur(16px);border:1px solid var(--line);border-radius:22px;padding:7px;display:grid;grid-template-columns:repeat(5,1fr);box-shadow:var(--shadow)}
+.navbtn{border:0;background:transparent;color:var(--muted);padding:8px 4px;border-radius:15px;cursor:pointer;font-size:11px}.navbtn b{display:block;font-size:19px}.navbtn.active{background:rgba(109,93,252,.11);color:var(--p)}
+.view{display:none}.view.active{display:block}.modal{position:fixed;inset:0;background:rgba(5,8,20,.58);z-index:50;display:none;align-items:flex-end;justify-content:center;padding:14px}.modal.open{display:flex}.sheet{width:min(680px,100%);max-height:91%;overflow:auto;background:var(--panel);border-radius:26px;padding:18px;border:1px solid var(--line)}.formgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.formgrid .full{grid-column:1/-1}.sheet h2{margin:0 0 14px}.sheet .actions{justify-content:flex-end;margin-top:14px}
+.empty{text-align:center;padding:34px 10px;color:var(--muted)}.chartbars{height:155px;display:flex;gap:9px;align-items:end;padding-top:10px}.bar{flex:1;background:linear-gradient(180deg,var(--cyan),var(--p));border-radius:9px 9px 4px 4px;min-height:4px;position:relative}.bar span{position:absolute;bottom:-22px;left:50%;transform:translateX(-50%);font-size:10px;color:var(--muted)}
+.table{width:100%;border-collapse:collapse}.table th,.table td{padding:10px;border-bottom:1px solid var(--line);text-align:left;font-size:13px}.table th{color:var(--muted)}
+.toast{position:fixed;right:16px;top:16px;background:#15182a;color:#fff;padding:12px 16px;border-radius:14px;box-shadow:var(--shadow);z-index:80;opacity:0;pointer-events:none;transform:translateY(-8px);transition:.2s}.toast.show{opacity:1;transform:none}
+@media(max-width:850px){.hero,.next,.mainlist,.side{grid-column:span 12}.kpis{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:560px){.app{padding:12px 10px 94px}.brand small{display:none}.actions .label{display:none}.hero .big{font-size:32px}.quick{grid-template-columns:1fr}.kpis{grid-template-columns:1fr 1fr}.formgrid{grid-template-columns:1fr}.formgrid .full{grid-column:auto}.donutWrap{align-items:flex-start}.donut{width:110px}}
+</style>
+</head>
+<body>
+<div class="app">
+<header>
+  <div class="brand"><div class="logo">◎</div><div><h1>SubsTrack</h1><small>Control total de tus suscripciones</small></div></div>
+  <div class="actions"><button class="iconbtn" id="themeBtn" title="Cambiar tema">☾</button><button class="btn primary" id="addBtn">＋ <span class="label">Nueva suscripción</span></button></div>
+</header>
+
+<section id="view-home" class="view active">
+<div class="grid">
+  <div class="card hero">
+    <div class="meta">Gasto mensual en suscripciones</div>
+    <div class="big" id="heroMonthly">$0.00</div>
+    <div class="meta" id="heroAnnual">≈ $0.00 al año</div>
+    <div class="quick">
+      <div><span>Activas</span><b id="qActive">0</b></div>
+      <div><span>Próximo cobro</span><b id="qNext">—</b></div>
+      <div><span>Ahorro potencial</span><b id="qSave">$0</b></div>
+    </div>
+  </div>
+
+  <div class="card next">
+    <div class="section-title"><h2>Próximos cobros</h2><button class="btn ghost" data-go="calendar">Calendario</button></div>
+    <div id="nextList" class="calendar"></div>
+  </div>
+
+  <div class="kpis">
+    <div class="kpi"><span>Presupuesto mensual</span><strong id="kBudget">$0</strong><div class="progress"><i id="budgetBar" style="width:0%"></i></div><i id="budgetStatus">Configúralo en Ajustes</i></div>
+    <div class="kpi"><span>Este mes</span><strong id="kMonth">$0</strong><i id="kMonthDelta">Pagos registrados</i></div>
+    <div class="kpi"><span>Pruebas gratis</span><strong id="kTrials">0</strong><i id="kTrialText">Sin riesgo de cobro</i></div>
+    <div class="kpi"><span>Precio aumentado</span><strong id="kRaises">0</strong><i>Suscripciones a revisar</i></div>
+  </div>
+
+  <div class="card mainlist">
+    <div class="section-title"><h2>Mis suscripciones</h2><span class="muted" id="subCount"></span></div>
+    <div class="tabs" id="tabs">
+      <button class="tab active" data-filter="all">Todas</button><button class="tab" data-filter="active">Activas</button><button class="tab" data-filter="trial">Pruebas</button><button class="tab" data-filter="review">Revisar</button><button class="tab" data-filter="paused">Pausadas</button>
+    </div>
+    <div class="toolbar"><input class="search" id="searchInput" placeholder="Buscar suscripción, categoría o etiqueta..."><select id="sortSel" style="width:auto"><option value="next">Próximo cobro</option><option value="priceDesc">Mayor precio</option><option value="name">Nombre</option></select></div>
+    <div id="subsList"></div>
+  </div>
+
+  <div class="side">
+    <div class="card">
+      <div class="section-title"><h2>¿Dónde se va tu dinero?</h2></div>
+      <div class="donutWrap"><div class="donut" id="donut"></div><div class="legend" id="legend"></div></div>
+      <div class="insight" id="savingInsight">Añade suscripciones y marca el nivel de uso para obtener recomendaciones.</div>
+    </div>
+    <div class="card" style="margin-top:14px">
+      <div class="section-title"><h2>Alertas inteligentes</h2></div>
+      <div id="alerts"></div>
+    </div>
+  </div>
+</div>
+</section>
+
+<section id="view-calendar" class="view">
+<div class="grid">
+ <div class="card" style="grid-column:span 12">
+  <div class="section-title"><h2>Calendario de cobros</h2><div><button class="btn ghost" id="prevMonth">‹</button> <b id="calTitle"></b> <button class="btn ghost" id="nextMonth">›</button></div></div>
+  <div id="calendarList" class="calendar"></div>
+ </div>
+</div>
+</section>
+
+<section id="view-stats" class="view">
+<div class="grid">
+ <div class="card" style="grid-column:span 7"><div class="section-title"><h2>Evolución mensual</h2></div><div class="chartbars" id="monthBars"></div></div>
+ <div class="card" style="grid-column:span 5"><div class="section-title"><h2>Resumen financiero</h2></div><div id="statsSummary"></div></div>
+ <div class="card" style="grid-column:span 12"><div class="section-title"><h2>Historial de pagos</h2><button class="btn ghost" id="exportCsv">Exportar CSV</button></div><div style="overflow:auto"><table class="table"><thead><tr><th>Fecha</th><th>Suscripción</th><th>Categoría</th><th>Importe</th></tr></thead><tbody id="paymentsBody"></tbody></table></div></div>
+</div>
+</section>
+
+<section id="view-tools" class="view">
+<div class="grid">
+ <div class="card" style="grid-column:span 6"><div class="section-title"><h2>Simulador de ahorro</h2></div><p class="muted">Selecciona qué suscripciones eliminarías y mira el ahorro mensual y anual.</p><div id="simList"></div><div class="insight"><b id="simMonth">$0/mes</b><br><span id="simYear">$0/año</span></div></div>
+ <div class="card" style="grid-column:span 6"><div class="section-title"><h2>Detector de fugas</h2></div><div id="leaks"></div></div>
+ <div class="card" style="grid-column:span 12"><div class="section-title"><h2>Renovaciones anuales</h2></div><div id="annualRenewals"></div></div>
+</div>
+</section>
+
+<section id="view-settings" class="view">
+<div class="grid">
+ <div class="card" style="grid-column:span 6"><div class="section-title"><h2>Preferencias</h2></div>
+  <label>Moneda<select id="currencySel"><option value="$">USD ($)</option><option value="€">EUR (€)</option><option value="S/">PEN (S/)</option><option value="£">GBP (£)</option><option value="MX$">MXN (MX$)</option></select></label><br>
+  <label>Presupuesto mensual<input type="number" id="budgetInput" min="0" step="0.01"></label><br>
+  <button class="btn primary" id="saveSettings">Guardar preferencias</button>
+ </div>
+ <div class="card" style="grid-column:span 6"><div class="section-title"><h2>Datos y respaldo</h2></div>
+  <p class="muted">Todo se guarda en este dispositivo. Puedes exportar un respaldo e importarlo en otro navegador.</p>
+  <div class="actions"><button class="btn" id="exportJson">Exportar respaldo</button><label class="btn" style="display:inline-grid;place-items:center">Importar respaldo<input type="file" id="importJson" accept=".json" hidden></label><button class="btn danger" id="resetData">Borrar todo</button></div>
+ </div>
+ <div class="card" style="grid-column:span 12"><div class="section-title"><h2>Funciones incluidas</h2></div><p class="muted">PWA instalable · funcionamiento offline · pruebas gratis · aumentos de precio · múltiples ciclos de cobro · historial · etiquetas · método de pago · uso · renovaciones · proyección · presupuesto · exportación CSV/JSON · modo oscuro.</p></div>
+</div>
+</section>
+</div>
+
+<nav class="bottomnav">
+<button class="navbtn active" data-view="home"><b>⌂</b>Inicio</button>
+<button class="navbtn" data-view="calendar"><b>▣</b>Cobros</button>
+<button class="navbtn" data-view="stats"><b>▥</b>Estadísticas</button>
+<button class="navbtn" data-view="tools"><b>✦</b>Ahorrar</button>
+<button class="navbtn" data-view="settings"><b>⚙</b>Más</button>
+</nav>
+
+<div class="modal" id="modal"><form class="sheet" id="subForm">
+<div class="section-title"><h2 id="modalTitle">Nueva suscripción</h2><button type="button" class="iconbtn" id="closeModal">✕</button></div>
+<input type="hidden" id="editId">
+<div class="formgrid">
+ <label>Nombre<input id="fName" required maxlength="60" placeholder="Ej. Netflix"></label>
+ <label>Categoría<select id="fCategory"><option>Entretenimiento</option><option>Software</option><option>Salud</option><option>Educación</option><option>Nube/Hosting</option><option>Noticias</option><option>Finanzas</option><option>Hogar</option><option>Otros</option></select></label>
+ <label>Precio<input id="fPrice" type="number" min="0" step="0.01" required></label>
+ <label>Ciclo<select id="fCycle"><option value="monthly">Mensual</option><option value="yearly">Anual</option><option value="weekly">Semanal</option><option value="quarterly">Trimestral</option></select></label>
+ <label>Próximo cobro<input id="fNext" type="date" required></label>
+ <label>Inicio de suscripción<input id="fStart" type="date"></label>
+ <label>Método de pago<input id="fPayment" placeholder="Visa •••• 1234"></label>
+ <label>Estado<select id="fStatus"><option value="active">Activa</option><option value="trial">Prueba gratis</option><option value="paused">Pausada</option><option value="cancelled">Cancelada</option></select></label>
+ <label>Uso<select id="fUsage"><option value="high">La uso mucho</option><option value="medium">Uso normal</option><option value="low">La uso poco</option><option value="none">Ya no la uso</option></select></label>
+ <label>Precio anterior<input id="fOldPrice" type="number" min="0" step="0.01" placeholder="Opcional"></label>
+ <label class="full">Etiquetas<input id="fTags" placeholder="trabajo, familia, streaming"></label>
+ <label class="full">Notas<textarea id="fNotes" rows="2" placeholder="Detalles opcionales"></textarea></label>
+ <label><input id="fAuto" type="checkbox" checked style="width:auto"> Renovación automática</label>
+ <label><input id="fNotify" type="checkbox" checked style="width:auto"> Marcar como importante</label>
+</div>
+<div class="actions"><button type="button" class="btn danger" id="deleteBtn" style="display:none">Eliminar</button><button type="button" class="btn" id="cancelModal">Cancelar</button><button class="btn primary">Guardar</button></div>
+</form></div>
+
+<div class="toast" id="toast"></div>
+<script>
+const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+const KEY='substrack_data_v1';
+const defaultData={settings:{currency:'$',budget:120},subs:[
+{id:'s1',name:'CineStream',category:'Entretenimiento',price:15.99,cycle:'monthly',next:addDaysISO(3),start:addDaysISO(-210),payment:'Visa •••• 4482',status:'active',usage:'medium',oldPrice:12.99,tags:'streaming,familia',notes:'Plan familiar',auto:true,notify:true},
+{id:'s2',name:'CloudBox Pro',category:'Nube/Hosting',price:9.99,cycle:'monthly',next:addDaysISO(7),start:addDaysISO(-420),payment:'Mastercard •••• 2091',status:'active',usage:'high',oldPrice:9.99,tags:'trabajo,nube',notes:'',auto:true,notify:true},
+{id:'s3',name:'FitClub',category:'Salud',price:29.90,cycle:'monthly',next:addDaysISO(11),start:addDaysISO(-95),payment:'Débito',status:'active',usage:'low',oldPrice:24.90,tags:'gimnasio',notes:'Revisar si sigo yendo',auto:true,notify:true},
+{id:'s4',name:'DesignKit',category:'Software',price:14.99,cycle:'monthly',next:addDaysISO(1),start:addDaysISO(-13),payment:'Visa •••• 4482',status:'trial',usage:'medium',oldPrice:14.99,tags:'diseño,trabajo',notes:'Prueba gratuita',auto:true,notify:true}
+],payments:[]};
+
+function addDaysISO(n){const d=new Date();d.setHours(12,0,0,0);d.setDate(d.getDate()+n);return d.toISOString().slice(0,10)}
+function load(){try{return JSON.parse(localStorage.getItem(KEY))||structuredClone(defaultData)}catch(e){return structuredClone(defaultData)}}
+let data=load(), filter='all', calOffset=0;
+const catColors={'Entretenimiento':'#ff69b4','Software':'#6d5dfc','Salud':'#15c783','Educación':'#f5c542','Nube/Hosting':'#17c3e2','Noticias':'#ff9f43','Finanzas':'#3b82f6','Hogar':'#8b5cf6','Otros':'#8b90a5'};
+const catIcons={'Entretenimiento':'▶','Software':'⌘','Salud':'♥','Educación':'✎','Nube/Hosting':'☁','Noticias':'▤','Finanzas':'$','Hogar':'⌂','Otros':'•'};
+function save(){localStorage.setItem(KEY,JSON.stringify(data))}
+function money(v){return data.settings.currency+Number(v||0).toFixed(2)}
+function monthly(s){if(s.status==='cancelled'||s.status==='paused')return 0; return s.cycle==='yearly'?s.price/12:s.cycle==='weekly'?s.price*52/12:s.cycle==='quarterly'?s.price/3:s.price}
+function annual(s){return monthly(s)*12}
+function daysTo(iso){const a=new Date();a.setHours(0,0,0,0);const b=new Date(iso+'T00:00:00');return Math.round((b-a)/86400000)}
+function fmtDate(iso){if(!iso)return '—'; return new Date(iso+'T12:00:00').toLocaleDateString('es',{day:'numeric',month:'short',year:'numeric'})}
+function cycleLabel(c){return ({monthly:'mes',yearly:'año',weekly:'semana',quarterly:'trimestre'})[c]||c}
+function statusLabel(s){return ({active:'Activa',trial:'Prueba',paused:'Pausada',cancelled:'Cancelada'})[s]||s}
+function usageLabel(u){return ({high:'Uso alto',medium:'Uso normal',low:'Uso bajo',none:'Sin uso'})[u]||u}
+function toast(msg){const t=$('#toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),1800)}
+function render(){
+ const active=data.subs.filter(s=>s.status==='active'||s.status==='trial');
+ const m=active.reduce((a,s)=>a+monthly(s),0), y=m*12;
+ $('#heroMonthly').textContent=money(m); $('#heroAnnual').textContent='≈ '+money(y)+' al año'; $('#qActive').textContent=active.length;
+ const upcoming=active.filter(s=>daysTo(s.next)>=0).sort((a,b)=>a.next.localeCompare(b.next));
+ $('#qNext').textContent=upcoming[0]?daysTo(upcoming[0].next)+' días':'—';
+ const low=active.filter(s=>s.usage==='low'||s.usage==='none'); const potential=low.reduce((a,s)=>a+monthly(s),0); $('#qSave').textContent=money(potential);
+ $('#kBudget').textContent=money(data.settings.budget||0); const pct=data.settings.budget?Math.min(130,m/data.settings.budget*100):0; $('#budgetBar').style.width=Math.min(100,pct)+'%';
+ $('#budgetStatus').textContent=data.settings.budget?(pct>100?'Superaste el presupuesto':pct>80?'Cerca del límite':'Dentro del presupuesto'):'Configúralo en Ajustes';
+ $('#kMonth').textContent=money(m); $('#kTrials').textContent=active.filter(s=>s.status==='trial').length; $('#kRaises').textContent=active.filter(s=>s.oldPrice&&s.price>s.oldPrice).length;
+ $('#kTrialText').textContent=active.some(s=>s.status==='trial')?'Revisa antes del cobro':'Sin pruebas activas';
+ renderNext(upcoming); renderSubs(); renderCategories(active); renderAlerts(active); renderStats(); renderTools(); renderCalendar();
+}
+function renderNext(upcoming){
+ const list=upcoming.slice(0,4); $('#nextList').innerHTML=list.length?list.map(s=>`<div class="event"><div class="day">${new Date(s.next+'T12:00:00').getDate()}<span>${new Date(s.next+'T12:00:00').toLocaleDateString('es',{month:'short'})}</span></div><div><b>${esc(s.name)}</b><small class="muted" style="display:block">${esc(s.category)} · ${cycleLabel(s.cycle)}</small></div><b>${money(s.price)}</b></div>`).join(''):'<div class="empty">No hay próximos cobros.</div>'
+}
+function esc(v){return String(v??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]))}
+function renderSubs(){
+ let arr=[...data.subs]; const q=$('#searchInput').value.trim().toLowerCase();
+ if(filter!=='all') arr=arr.filter(s=>filter==='review'?(s.usage==='low'||s.usage==='none'||(s.oldPrice&&s.price>s.oldPrice)):s.status===filter);
+ if(q)arr=arr.filter(s=>(s.name+' '+s.category+' '+(s.tags||'')).toLowerCase().includes(q));
+ const sort=$('#sortSel').value; arr.sort(sort==='priceDesc'?(a,b)=>monthly(b)-monthly(a):sort==='name'?(a,b)=>a.name.localeCompare(b.name):(a,b)=>a.next.localeCompare(b.next));
+ $('#subCount').textContent=data.subs.length+' guardadas';
+ $('#subsList').innerHTML=arr.length?arr.map(s=>`<div class="sub" data-id="${s.id}" tabindex="0"><div class="badgeicon" style="background:${catColors[s.category]||'#8b90a5'}">${catIcons[s.category]||'•'}</div><div><h3>${esc(s.name)}</h3><small>${esc(s.category)} · ${statusLabel(s.status)} · ${usageLabel(s.usage)}</small><br><span class="pill">${daysTo(s.next)>=0?'Cobro en '+daysTo(s.next)+' días':'Vencida hace '+Math.abs(daysTo(s.next))+' días'}</span>${s.oldPrice&&s.price>s.oldPrice?` <span class="pill" style="color:#d92f4d">↑ de ${money(s.oldPrice)}</span>`:''}</div><div class="money"><b>${money(s.price)}</b><small>/ ${cycleLabel(s.cycle)}</small><br><button class="btn ghost edit" data-id="${s.id}" style="min-height:32px;padding:0 10px;margin-top:5px">Editar</button></div></div>`).join(''):'<div class="empty">No hay resultados.</div>';
+ $$('.edit').forEach(b=>b.addEventListener('click',()=>openEdit(b.dataset.id)));
+}
+function renderCategories(active){
+ const map={}; active.forEach(s=>map[s.category]=(map[s.category]||0)+monthly(s)); const total=Object.values(map).reduce((a,b)=>a+b,0)||1;
+ const entries=Object.entries(map).sort((a,b)=>b[1]-a[1]);
+ let deg=0, parts=[]; entries.forEach(([c,v])=>{const n=v/total*100;parts.push(`${catColors[c]||'#8b90a5'} ${deg}% ${deg+n}%`);deg+=n});
+ $('#donut').style.background=parts.length?'conic-gradient('+parts.join(',')+')':'#e7e9f3';
+ $('#legend').innerHTML=entries.slice(0,6).map(([c,v])=>`<div><span class="dot" style="background:${catColors[c]||'#8b90a5'}"></span>${esc(c)} <b>${Math.round(v/total*100)}%</b></div>`).join('')||'<span class="muted">Sin datos</span>';
+ const low=active.filter(s=>s.usage==='low'||s.usage==='none'), saveV=low.reduce((a,s)=>a+annual(s),0);
+ $('#savingInsight').innerHTML=saveV?`💡 Si cancelaras ${low.length} suscripción(es) de poco o ningún uso, ahorrarías <b>${money(saveV)} al año</b>.`:'✨ No detectamos gastos de poco uso por ahora.';
+}
+function renderAlerts(active){
+ const alerts=[];
+ active.forEach(s=>{const d=daysTo(s.next);if(s.status==='trial'&&d<=5&&d>=0)alerts.push(`⏳ <b>${esc(s.name)}</b>: la prueba termina en ${d} día(s).`);if(s.oldPrice&&s.price>s.oldPrice)alerts.push(`📈 <b>${esc(s.name)}</b> subió ${money(s.price-s.oldPrice)}.`);if(s.usage==='none')alerts.push(`🧯 <b>${esc(s.name)}</b> está marcada como "ya no la uso".`)});
+ $('#alerts').innerHTML=alerts.slice(0,5).map(a=>`<div class="insight">${a}</div>`).join('')||'<div class="muted">Sin alertas importantes.</div>';
+}
+function renderStats(){
+ const active=data.subs.filter(s=>s.status==='active'||s.status==='trial'), m=active.reduce((a,s)=>a+monthly(s),0);
+ const months=[-5,-4,-3,-2,-1,0].map(o=>{const d=new Date();d.setMonth(d.getMonth()+o);return d.toLocaleDateString('es',{month:'short'})});
+ const vals=months.map((_,i)=>m*(0.86+i*.028)); const max=Math.max(...vals,1);
+ $('#monthBars').innerHTML=vals.map((v,i)=>`<div class="bar" style="height:${Math.max(6,v/max*120)}px"><span>${months[i]}</span></div>`).join('');
+ const started=active.reduce((a,s)=>a+(s.start?Math.max(0,Math.round((Date.now()-new Date(s.start+'T12:00:00'))/86400000)):0),0);
+ $('#statsSummary').innerHTML=`<div class="kpi"><span>Mensual</span><strong>${money(m)}</strong></div><div class="kpi" style="margin-top:10px"><span>Anual proyectado</span><strong>${money(m*12)}</strong></div><div class="insight">Promedio de antigüedad: <b>${active.length?Math.round(started/active.length):0} días</b>.</div>`;
+ $('#paymentsBody').innerHTML=data.payments.length?data.payments.slice().sort((a,b)=>b.date.localeCompare(a.date)).map(p=>`<tr><td>${fmtDate(p.date)}</td><td>${esc(p.name)}</td><td>${esc(p.category)}</td><td>${money(p.amount)}</td></tr>`).join(''):'<tr><td colspan="4" class="muted">Aún no hay pagos registrados manualmente.</td></tr>';
+}
+function renderTools(){
+ const active=data.subs.filter(s=>s.status==='active'||s.status==='trial');
+ $('#simList').innerHTML=active.map(s=>`<label style="display:flex;gap:10px;align-items:center;padding:8px 0;border-bottom:1px solid var(--line)"><input type="checkbox" class="simChk" data-id="${s.id}" style="width:auto"><span style="flex:1">${esc(s.name)}</span><b>${money(monthly(s))}/mes</b></label>`).join('')||'<div class="empty">Sin suscripciones activas.</div>';
+ $$('.simChk').forEach(c=>c.addEventListener('change',updateSim)); updateSim();
+ const leaks=active.filter(s=>s.usage==='none'||s.usage==='low'||(s.oldPrice&&s.price>s.oldPrice));
+ $('#leaks').innerHTML=leaks.length?leaks.map(s=>`<div class="insight"><b>${esc(s.name)}</b><br><span class="muted">${s.usage==='none'?'Sin uso':s.usage==='low'?'Uso bajo':'Precio aumentado'} · ${money(annual(s))}/año</span></div>`).join(''):'<div class="muted">No detectamos fugas evidentes.</div>';
+ const annuals=data.subs.filter(s=>s.cycle==='yearly'&&(s.status==='active'||s.status==='trial')).sort((a,b)=>a.next.localeCompare(b.next));
+ $('#annualRenewals').innerHTML=annuals.length?annuals.map(s=>`<div class="event"><div class="day">${new Date(s.next+'T12:00:00').getDate()}<span>${new Date(s.next+'T12:00:00').toLocaleDateString('es',{month:'short'})}</span></div><div><b>${esc(s.name)}</b><small class="muted" style="display:block">Renovación anual</small></div><b>${money(s.price)}</b></div>`).join(''):'<div class="muted">No tienes renovaciones anuales.</div>';
+}
+function updateSim(){let m=0; $$('.simChk:checked').forEach(c=>{const s=data.subs.find(x=>x.id===c.dataset.id);if(s)m+=monthly(s)});$('#simMonth').textContent=money(m)+'/mes';$('#simYear').textContent=money(m*12)+'/año'}
+function renderCalendar(){
+ const d=new Date();d.setDate(1);d.setMonth(d.getMonth()+calOffset); const month=d.getMonth(),year=d.getFullYear();
+ $('#calTitle').textContent=d.toLocaleDateString('es',{month:'long',year:'numeric'});
+ const arr=data.subs.filter(s=>{const n=new Date(s.next+'T12:00:00');return n.getMonth()===month&&n.getFullYear()===year&&s.status!=='cancelled'}).sort((a,b)=>a.next.localeCompare(b.next));
+ $('#calendarList').innerHTML=arr.length?arr.map(s=>`<div class="event"><div class="day">${new Date(s.next+'T12:00:00').getDate()}<span>${new Date(s.next+'T12:00:00').toLocaleDateString('es',{weekday:'short'})}</span></div><div><b>${esc(s.name)}</b><small class="muted" style="display:block">${esc(s.category)} · ${statusLabel(s.status)}</small></div><b>${money(s.price)}</b></div>`).join(''):'<div class="empty">No hay cobros en este mes.</div>';
+}
+function openEdit(id){
+ const s=data.subs.find(x=>x.id===id); if(!s)return;
+ $('#modalTitle').textContent='Editar suscripción';$('#editId').value=s.id;$('#fName').value=s.name;$('#fCategory').value=s.category;$('#fPrice').value=s.price;$('#fCycle').value=s.cycle;$('#fNext').value=s.next;$('#fStart').value=s.start||'';$('#fPayment').value=s.payment||'';$('#fStatus').value=s.status;$('#fUsage').value=s.usage;$('#fOldPrice').value=s.oldPrice||'';$('#fTags').value=s.tags||'';$('#fNotes').value=s.notes||'';$('#fAuto').checked=!!s.auto;$('#fNotify').checked=!!s.notify;$('#deleteBtn').style.display='inline-block';$('#modal').classList.add('open')
+}
+function openNew(){
+ $('#subForm').reset();$('#modalTitle').textContent='Nueva suscripción';$('#editId').value='';$('#fNext').value=addDaysISO(30);$('#fStart').value=addDaysISO(0);$('#fStatus').value='active';$('#fUsage').value='medium';$('#fAuto').checked=true;$('#fNotify').checked=true;$('#deleteBtn').style.display='none';$('#modal').classList.add('open')
+}
+function closeModal(){ $('#modal').classList.remove('open') }
+$('#subForm').addEventListener('submit',e=>{e.preventDefault();const id=$('#editId').value||'s'+Date.now();const old=data.subs.find(x=>x.id===id);const s={id,name:$('#fName').value.trim(),category:$('#fCategory').value,price:Math.max(0,Number($('#fPrice').value)||0),cycle:$('#fCycle').value,next:$('#fNext').value,start:$('#fStart').value,payment:$('#fPayment').value.trim(),status:$('#fStatus').value,usage:$('#fUsage').value,oldPrice:Number($('#fOldPrice').value)||0,tags:$('#fTags').value.trim(),notes:$('#fNotes').value.trim(),auto:$('#fAuto').checked,notify:$('#fNotify').checked};if(!s.name||!s.next)return toast('Completa nombre y fecha'); if(old){Object.assign(old,s)}else data.subs.push(s);save();closeModal();render();toast('Suscripción guardada')})
+$('#deleteBtn').addEventListener('click',()=>{const id=$('#editId').value;if(!id)return;if(confirm('¿Eliminar esta suscripción?')){data.subs=data.subs.filter(s=>s.id!==id);save();closeModal();render();toast('Eliminada')}})
+$('#addBtn').addEventListener('click',openNew);$('#closeModal').addEventListener('click',closeModal);$('#cancelModal').addEventListener('click',closeModal);$('#modal').addEventListener('click',e=>{if(e.target.id==='modal')closeModal()})
+$('#searchInput').addEventListener('input',renderSubs);$('#sortSel').addEventListener('change',renderSubs);
+$$('.tab').forEach(t=>t.addEventListener('click',()=>{$$('.tab').forEach(x=>x.classList.remove('active'));t.classList.add('active');filter=t.dataset.filter;renderSubs()}))
+function go(view){$$('.view').forEach(v=>v.classList.remove('active'));$('#view-'+view).classList.add('active');$$('.navbtn').forEach(n=>n.classList.toggle('active',n.dataset.view===view));window.scrollTo({top:0,behavior:'smooth'});render()}
+$$('.navbtn').forEach(n=>n.addEventListener('click',()=>go(n.dataset.view)));$$('[data-go]').forEach(n=>n.addEventListener('click',()=>go(n.dataset.go)))
+$('#prevMonth').addEventListener('click',()=>{calOffset--;renderCalendar()});$('#nextMonth').addEventListener('click',()=>{calOffset++;renderCalendar()});
+$('#themeBtn').addEventListener('click',()=>{const dark=document.documentElement.getAttribute('data-theme')==='dark';document.documentElement.setAttribute('data-theme',dark?'light':'dark');localStorage.setItem('substrack_theme',dark?'light':'dark')});
+document.documentElement.setAttribute('data-theme',localStorage.getItem('substrack_theme')||'light');
+$('#saveSettings').addEventListener('click',()=>{data.settings.currency=$('#currencySel').value;data.settings.budget=Math.max(0,Number($('#budgetInput').value)||0);save();render();toast('Preferencias guardadas')})
+$('#currencySel').value=data.settings.currency;$('#budgetInput').value=data.settings.budget;
+function download(name,txt,type){const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([txt],{type}));a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000)}
+$('#exportJson').addEventListener('click',()=>download('substrack-respaldo.json',JSON.stringify(data,null,2),'application/json'))
+$('#importJson').addEventListener('change',e=>{const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{try{const j=JSON.parse(r.result);if(!j.subs||!j.settings)throw 0;data=j;save();$('#currencySel').value=data.settings.currency;$('#budgetInput').value=data.settings.budget;render();toast('Respaldo importado')}catch(_){alert('Archivo de respaldo no válido')}};r.readAsText(f)})
+$('#resetData').addEventListener('click',()=>{if(confirm('Esto borrará todos los datos locales. ¿Continuar?')){data={settings:{currency:'$',budget:0},subs:[],payments:[]};save();render();toast('Datos eliminados')}})
+$('#exportCsv').addEventListener('click',()=>{const rows=[['Fecha','Suscripción','Categoría','Importe'],...data.payments.map(p=>[p.date,p.name,p.category,p.amount])];download('substrack-pagos.csv',rows.map(r=>r.map(x=>`"${String(x).replace(/"/g,'""')}"`).join(',')).join('\n'),'text/csv')})
+if('serviceWorker' in navigator)navigator.serviceWorker.register('sw.js').catch(()=>{});
+render();
+</script>
+</body></html>
